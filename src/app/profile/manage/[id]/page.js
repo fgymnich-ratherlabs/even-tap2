@@ -21,7 +21,7 @@ const GET_EVENT_APPLICATIONS_QUERY = gql`
   }
 `;
 
-export default EventApplications = ({ params }) => {
+export default function EventApplications({ params }) {
     const  eventId  = params.id;
     // Ejecutar la query para obtener las aplicaciones del evento
     const { loading, error, data } = useQuery(GET_EVENT_APPLICATIONS_QUERY, {
