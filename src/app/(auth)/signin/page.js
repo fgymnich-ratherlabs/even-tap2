@@ -34,7 +34,8 @@ export default function SigninForm() {
 
       }
     } catch (error) {
-      alert("Usuario o Clave incorrectas.");
+      window.alert("Usuario o Clave incorrectas.");
+      throw new Error("Usuario o Clave incorrectas.");
       console.error('Error during sign in:', error);
     }
   };
