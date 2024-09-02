@@ -30,8 +30,9 @@ export default function CreateEvent() {
   const [createEvent, { data, loading, error }] = useMutation(CREATE_EVENT_MUTATION, {
     onCompleted: (data) => {
       console.log('Event created:', data.createEvent);
-      router.refresh();
       router.push('/dashboard');
+      router.refresh();
+
     },
   });
 
