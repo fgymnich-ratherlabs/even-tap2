@@ -27,7 +27,7 @@ app.use(express.json());
 
 // Configurar CORS
 app.use(cors({
-  origin: 'http://localhost:3000', // Cambia esto al dominio de tu frontend
+  origin: 'https://even-tap2.vercel.app', // Cambia esto al dominio de tu frontend
   methods: ['GET', 'POST', 'OPTIONS'], // Métodos permitidos
   allowedHeaders: ['Content-Type', 'Authorization'], // Headers permitidos
   credentials: true // Permitir el uso de cookies y headers de autenticación
@@ -41,6 +41,6 @@ app.use('/graphql', authenticateMiddleware, graphqlHTTP((req) => ({
   graphiql: true,
 })));
 
-app.listen(4000, () => {
-  console.log('Server is running on http://localhost:4000/graphql');
+app.listen(10000, () => {
+  console.log('Server is running on http://localhost:10000/graphql');
 });
