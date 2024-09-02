@@ -31,12 +31,11 @@ export default function SigninForm() {
         //localStorage.setItem('authToken', response.data.signin);
         Cookies.set('authToken', response.data.signin, { expires: 1, secure: true, sameSite: 'Strict' });
         router.push('/dashboard'); // Redirigir al dashboard u otra página tras iniciar sesión
-
+      }else{
+        window.alert("Usuario o Clave incorrectas.");
       }
     } catch (error) {
-      window.alert("Usuario o Clave incorrectas.");
-      throw new Error("Usuario o Clave incorrectas.");
-      console.error('Error during sign in:', error);
+      throw new Error('Error during sign in:', error);
     }
   };
 
