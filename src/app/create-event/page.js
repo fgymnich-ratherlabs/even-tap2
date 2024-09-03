@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useMutation, gql } from '@apollo/client';
-import { useRouter } from 'next/navigation';
 
 const CREATE_EVENT_MUTATION = gql`
   mutation CreateEvent($name: String!, $description: String!, $location: String!, $date: String!, $maxCapacity: Int!) {
@@ -24,14 +23,12 @@ const CREATE_EVENT_MUTATION = gql`
 `;
 
 export default function CreateEvent() {
-  const router = useRouter();
   const [formData, setFormData] = React.useState(new FormData());
 
   const [createEvent, { data, loading, error }] = useMutation(CREATE_EVENT_MUTATION, {
     onCompleted: (data) => {
       console.log('Event created:', data.createEvent);
-      router.push('/dashboard');
-      router.refresh();
+      window.location.href = '/dashboard';
 
     },
   });
