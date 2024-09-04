@@ -69,7 +69,7 @@ export default function ProfilePage() {
                     <a href={`/events/${event.id}`} className="text-indigo-600 hover:text-indigo-500">Ver detalles</a>
                   </div>
                   <div>
-                    <a href={`/profile/manage/${event.id}`} className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">Gestionar aplicaciones</a>
+                    <a href={`/profile/manage/${event.id}`} className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Gestionar aplicaciones</a>
                   </div>
                 </li>
               ))}
