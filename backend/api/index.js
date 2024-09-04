@@ -27,8 +27,8 @@ app.use(express.json());
 
 // Configurar CORS
 app.use(cors({
-  //origin: 'https://even-tap2.vercel.app', // Cambia esto al dominio de tu frontend
-  origin: 'http://localhost:3000',
+  origin: 'https://even-tap2.vercel.app', // Cambia esto al dominio de tu frontend
+  //origin: 'http://localhost:3000',
   methods: ['GET', 'POST', 'OPTIONS'], // Métodos permitidos
   allowedHeaders: ['Content-Type', 'Authorization'], // Headers permitidos
   credentials: true // Permitir el uso de cookies y headers de autenticación
