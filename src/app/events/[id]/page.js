@@ -87,7 +87,7 @@ export default function EventPage({params}) {
               <button
                   onClick={handleApply}
                   disabled={loadingApplication||dataApplication||errorApplication}
-                  className="mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:pointer-events-none disabled:opacity-50 "
+                  className="mt-4 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 disabled:pointer-events-none disabled:opacity-50 "
                 >
                   {loadingApplication ? 'Aplicando...' : 'Aplicar al Evento'}
               </button>

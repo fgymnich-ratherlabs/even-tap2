@@ -6,8 +6,8 @@ import Cookies from 'js-cookie';
 
 // Configura el enlace HTTP a tu servidor GraphQL
 const httpLink = createHttpLink({
-  uri: 'https://even-tap2.onrender.com/graphql', // Cambia esta URL según sea necesario
-  //uri: 'http://localhost:10000/graphql',
+  //uri: 'https://even-tap2.onrender.com/graphql', // Cambia esta URL según sea necesario
+  uri: 'http://localhost:10000/graphql',
 });
 
 // Configura el enlace de autenticación (opcional)
@@ -36,6 +36,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     }
 
     if (networkError && networkError.statusCode === 403) {
+      // Manejar errores de red 403
+      Cookies.remove('authToken'); // Eliminar el token de las cookies
+      window.location.href = '/signin';
+    }
+
+    if (networkError && networkError.statusCode === 401) {
       // Manejar errores de red 403
       Cookies.remove('authToken'); // Eliminar el token de las cookies
       window.location.href = '/signin';

@@ -21,11 +21,6 @@ const authenticate = async (context) => {
   };
 
 const root = {
-    //potencialmente quitarlo por riesgo de seguridad  
-    users: async () => {
-      return await prisma.user.findMany();
-    },
-
     //get current user
     user: async (args, context) => {
       try {
@@ -64,7 +59,32 @@ const root = {
       if (!id){
         throw new Error('Id necesario.');
       }
-      return await prisma.event.findUnique({ where: { id: parseInt(id) }, include: { organizer: true },});
+
+      try {
+        // Buscar el evento por su ID en la base de datos
+        const event = await prisma.event.findUnique({
+          where: { id: parseInt(id) }, // Convertir ID a entero si es necesario
+          include: {
+            applications: {
+              include: {
+                user: true, // Incluir información del usuario en cada aplicación
+              },
+            },
+            organizer: true,
+          },
+        });
+  
+        // Verificar si se encontró el evento
+        if (!event) {
+          throw new Error('Evento no encontrado');
+        }
+  
+        return event;
+
+      } catch (error) {
+        console.error('Error al obtener el evento:', error);
+        throw new Error('No se pudo obtener el evento');
+      }
     },
 
     signup: async ({ name, email, password }) => {
@@ -202,6 +222,11 @@ const root = {
       if (application.version !== version) {
         throw new Error('La aplicación ha sido modificada por otro usuario. Actualiza la página e inténtalo de nuevo.');
       }
+      
+      //si la aplicación ya fue gestionada
+      if(application.status !== 'PENDING') throw new Error('Application already resolved.',{
+        invalidArgs: { applicationId },
+      });
 
       return await prisma.application.update({
         where: { id: parseInt(applicationId) },

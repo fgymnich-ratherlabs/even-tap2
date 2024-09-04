@@ -1,5 +1,7 @@
 import './globals.css';
 import ApolloWrapper from './components/ApolloWrapper';
+import Navbar from './components/navbar';
+
 
 export const metadata = {
   title: 'Event Management Platform',
@@ -11,6 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ApolloWrapper>
+          <Navbar />
           {children}
         </ApolloWrapper>
       </body>
