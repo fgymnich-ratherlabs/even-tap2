@@ -40,6 +40,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       Cookies.remove('authToken'); // Eliminar el token de las cookies
       window.location.href = '/signin';
     }
+
+    if (networkError && networkError.statusCode === 401) {
+      // Manejar errores de red 403
+      Cookies.remove('authToken'); // Eliminar el token de las cookies
+      window.location.href = '/signin';
+    }
   }
 });
 

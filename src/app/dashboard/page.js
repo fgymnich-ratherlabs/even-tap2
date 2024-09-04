@@ -43,17 +43,10 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-extrabold text-gray-900">Dashboard</h1>
-        </div>
-        <div>
+          <h1 className="text-2xl font-extrabold text-gray-900">Dashboard</h1>
           <Link href="/create-event">
-            <span className="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+            <span className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
               Crear Evento
-            </span>
-          </Link>
-          <Link href="/profile">
-            <span className="mt-6 ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-              Mi Perfil
             </span>
           </Link>
         </div>
@@ -83,18 +76,6 @@ export default function Dashboard() {
               ))}
             </ul>
           </div>
-        </div>
-        <div>
-          <button
-              onClick={(e) => {
-                e.preventDefault();
-                Cookies.remove('authToken'); 
-                window.location.href = '/signin';
-              }}
-              className="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
-            >
-              Log Out
-          </button>
         </div>
       </div>
     </div>

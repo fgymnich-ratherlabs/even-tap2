@@ -31,6 +31,7 @@ export default function SigninForm() {
         //localStorage.setItem('authToken', response.data.signin);
         Cookies.set('authToken', response.data.signin, { expires: 1, secure: true, sameSite: 'Strict' });
         router.push('/dashboard'); // Redirigir al dashboard u otra página tras iniciar sesión
+        router.refresh();
       }else{
         window.alert("Usuario o Clave incorrectas.");
       }
@@ -43,7 +44,13 @@ export default function SigninForm() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Iniciar Sesión</h2>
+          <h1 className="text-center text-3xl font-extrabold text-gray-900">Even Tap </h1>
+          <p className="mt-2 text-center text-2xl font-bold text-gray-700">
+            El lugar donde confluyen tus eventos
+          </p>
+        </div>
+        <div>
+          <h2 className="mt-6 text-center text-xl font-extrabold text-gray-800">Iniciar Sesión</h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Ingresa con tu correo y contraseña para continuar.
           </p>
