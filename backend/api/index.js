@@ -1,18 +1,17 @@
-const express = require('express');
-const { graphqlHTTP } = require('express-graphql');
-const authenticateMiddleware = require('./middleware/authenticate');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const shutdown = require('./services/shutdown');
+const setupServer = require('./setupServer');
 require('dotenv').config();
-const cors = require('cors');
-
 
 //Esquema de resolvers
 const schema = require('./schema');
 
 //GraphQL Resolvers
 const root = require('./resolvers/resolvers');
+
+const authenticateMiddleware = require('./middleware/authenticate');
+
 
 if (cluster.isMaster) {
   console.log(`Master process ID: ${process.pid}`);
@@ -39,27 +38,13 @@ if (cluster.isMaster) {
   // Los procesos workers entrarán en este bloque
   async function main() {
     try{
-      const app = express();
 
-      app.use(express.json());
+      const app = await setupServer({
+        schema,                 // Inject graphQL schema
+        authenticateMiddleware, // Inject authentication middleware
+        root      // Inject prisma client and resolvers
+      });
 
-      // Configurar CORS
-      app.use(cors({
-        origin: 'https://even-tap2.vercel.app', // Cambia esto al dominio de tu frontend
-        //origin: 'http://localhost:3000',
-        methods: ['GET', 'POST', 'OPTIONS'], // Métodos permitidos
-        allowedHeaders: ['Content-Type', 'Authorization'], // Headers permitidos
-        credentials: true // Permitir el uso de cookies y headers de autenticación
-      }));
-
-      //graphQLHTTP middleware
-      app.use('/graphql', authenticateMiddleware, graphqlHTTP((req) => ({
-        schema,
-        rootValue: root,
-        context: req,
-        graphiql: true,
-      })));
-      
       const port = 10000;
       const server = app.listen(port, () => {
         console.log(`Worker process ID ${process.pid} is running, listening on port ${port}`);

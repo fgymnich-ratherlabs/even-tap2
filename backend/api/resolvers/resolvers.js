@@ -1,11 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
-const { error } = require('console');
 const jwt = require('jsonwebtoken');
-const prisma = new PrismaClient();
 require('dotenv').config();
 const { UserInputError } = require('apollo-server-express'); 
-
 
 const authenticate = async (context) => {
     const authHeader = context.headers.authorization;
@@ -18,7 +15,9 @@ const authenticate = async (context) => {
     } catch (e) {
       throw new Error('Invalid token');
     }
-  };
+};
+
+const prisma = new PrismaClient();
 
 const root = {
     //get current user
