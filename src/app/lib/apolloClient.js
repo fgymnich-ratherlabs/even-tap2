@@ -6,8 +6,8 @@ import Cookies from 'js-cookie';
 
 // Configura el enlace HTTP a tu servidor GraphQL
 const httpLink = createHttpLink({
-  //uri: 'https://even-tap2.onrender.com/graphql', // Cambia esta URL según sea necesario
-  uri: 'http://localhost:10000/graphql',
+  uri: 'https://even-tap2.onrender.com/graphql', // Cambia esta URL según sea necesario
+  //uri: 'http://localhost:10000/graphql',
 });
 
 // Configura el enlace de autenticación (opcional)
