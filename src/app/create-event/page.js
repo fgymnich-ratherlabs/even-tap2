@@ -2,6 +2,9 @@
 
 import React from 'react';
 import { useMutation, gql } from '@apollo/client';
+import { CreateEventSchema } from './../lib/validations'
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+
 
 const CREATE_EVENT_MUTATION = gql`
   mutation CreateEvent($name: String!, $description: String!, $location: String!, $date: String!, $maxCapacity: Int!) {
@@ -33,30 +36,32 @@ export default function CreateEvent() {
     },
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async (values,{setSubmitting}) => {
+    const {name, description, location , date, maxCapacity } = values;
+    
     try {
       await createEvent({
         variables: {
-          name: formData.get('name'),
-          description: formData.get('description'),
-          location: formData.get('location'),
-          date: formData.get('date'),
-          maxCapacity: parseInt(formData.get('maxCapacity'), 10),
+          name: name,
+          description: description,
+          location: location,
+          date: date,
+          maxCapacity: parseInt(maxCapacity, 10),
         },
       });
     } catch (error) {
       console.error('Error creating event:', error);
+    } finally {
+      setSubmitting(false); // Indicar que el envío ha terminado
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => {
-      prevData.set(name, value);
-      return prevData;
-    });
+  const initialValues = {
+    name: '',
+    description: '',
+    location: '',
+    date: '',
+    maxCapacity: '',
   };
 
   return (
@@ -64,81 +69,85 @@ export default function CreateEvent() {
       <div className="max-w-lg mx-auto p-4">
         <div className="mt-6 bg-white shadow overflow-hidden sm:rounded-lg">
           <h1 className="text-2xl font-bold m-4">Crear Evento</h1>
-          <form onSubmit={handleSubmit} className="space-y-2 m-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Nombre de Evento
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                onChange={handleChange}
-                required
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-              />
-            </div>
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                Descripción
-              </label>
-              <textarea
-                name="description"
-                id="description"
-                onChange={handleChange}
-                required
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-              ></textarea>
-            </div>
-            <div>
-              <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-                Lugar
-              </label>
-              <input
-                type="text"
-                name="location"
-                id="location"
-                onChange={handleChange}
-                required
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-              />
-            </div>
-            <div>
-              <label htmlFor="date" className="block text-sm font-medium text-gray-700">
-                Fecha
-              </label>
-              <input
-                type="date"
-                name="date"
-                id="date"
-                onChange={handleChange}
-                required
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-              />
-            </div>
-            <div>
-              <label htmlFor="maxCapacity" className="block text-sm font-medium text-gray-700">
-                Capacidad Máxima
-              </label>
-              <input
-                type="number"
-                name="maxCapacity"
-                id="maxCapacity"
-                onChange={handleChange}
-                required
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-              />
-            </div>
-            <button
-              type="submit"
-              className="mt-4 w-full bg-indigo-500 text-white py-2 rounded-md hover:bg-indigo-700"
-              disabled={loading}
-            >
-              {loading ? 'Creando...' : 'Crear Evento'}
-            </button>
-            {error && <p className="mt-2 text-red-500">Error: {error.message}</p>}
-            {data && <p className="mt-2 text-green-500">Evento creado exitosamente</p>}
-          </form>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={CreateEventSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting }) => (
+              <Form className="space-y-2 m-4">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                    Nombre de Evento
+                  </label>
+                  <Field
+                    type="text"
+                    name="name"
+                    id="name"
+                    className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                  />
+                  <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
+                </div>
+                <div>
+                  <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                    Descripción
+                  </label>
+                  <Field
+                    as="textarea"
+                    name="description"
+                    id="description"
+                    className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                  />
+                  <ErrorMessage name="description" component="div" className="text-red-500 text-sm" />
+                </div>
+                <div>
+                  <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                    Lugar
+                  </label>
+                  <Field
+                    type="text"
+                    name="location"
+                    id="location"
+                    className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                  />
+                  <ErrorMessage name="location" component="div" className="text-red-500 text-sm" />
+                </div>
+                <div>
+                  <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+                    Fecha
+                  </label>
+                  <Field
+                    type="date"
+                    name="date"
+                    id="date"
+                    className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                  />
+                  <ErrorMessage name="date" component="div" className="text-red-500 text-sm" />
+                </div>
+                <div>
+                  <label htmlFor="maxCapacity" className="block text-sm font-medium text-gray-700">
+                    Capacidad Máxima
+                  </label>
+                  <Field
+                    type="number"
+                    name="maxCapacity"
+                    id="maxCapacity"
+                    className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                  />
+                  <ErrorMessage name="maxCapacity" component="div" className="text-red-500 text-sm" />
+                </div>
+                <button
+                  type="submit"
+                  className="mt-4 w-full bg-indigo-500 text-white py-2 rounded-md hover:bg-indigo-700"
+                  disabled={loading||isSubmitting}
+                >
+                  {loading ? 'Creando...' : 'Crear Evento'}
+                </button>
+                {error && <p className="mt-2 text-red-500">Error: {error.message}</p>}
+                {data && <p className="mt-2 text-green-500">Evento creado exitosamente</p>}
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </div>

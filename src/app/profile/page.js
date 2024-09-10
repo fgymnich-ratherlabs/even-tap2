@@ -62,7 +62,6 @@ export default function ProfilePage() {
                       <p className="text-gray-900 font-medium">{event.name}</p>
                       <p className="text-gray-500">{new Date(parseInt(event.date)).toLocaleDateString()}</p>
                       <p className="text-gray-500">{event.location}</p>
-                      <p className="text-gray-500">Aplicaciones: / {event.maxCapacity}</p>
                     </div>
                   </div>
                   <div className="ml-4 flex-shrink-0">
