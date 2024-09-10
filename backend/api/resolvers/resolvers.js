@@ -127,7 +127,6 @@ const root = {
     },
     createEvent: async ({ name, description, location, date, maxCapacity }, context) => {
       const user = await authenticate(context);
-      //if (user.role !== 'ORGANIZER') throw new Error('Not authorized');
 
       try { 
           const event = await prisma.event.create({
@@ -158,17 +157,15 @@ const root = {
         where: { id: parseInt(eventId) },
         include: {
           applications: {
-            where: { status: 'ACCEPTED' }
+            where: { 
+              OR: [ { status: 'ACCEPTED' },{ status: 'PENDING' } ]
+            }
           }
         }
       });
 
       if (!event) {
         throw new Error('El evento no existe.');
-      }
-
-      if (event.applications.length >= event.maxCapacity) {
-        throw new Error('El evento ha alcanzado su capacidad máxima.');
       }
 
       // Verificar si ya existe una aplicación para el usuario y el evento
@@ -180,6 +177,11 @@ const root = {
           },
         },
       });
+
+      // Verificar que no se supere la capacidad
+      if (event.applications.length >= event.maxCapacity) {
+        throw new Error('No es posible aplicar. El evento ya ha alcanzado su capacidad máxima.');
+      }
 
       if (existingApplication) {
         throw new UserInputError('Ya has aplicado a este evento.', {
@@ -206,26 +208,65 @@ const root = {
       }
     },
 
-    manageApplication: async ({ applicationId, status, version }, context) => {
+    manageApplication: async ({ applicationId, status, version, eventVersion }, context) => {
       const user = await authenticate(context);
       const application = await prisma.application.findUnique({
         where: { id: parseInt(applicationId) },
         include: { event: true },
       });
+      const event = await prisma.event.findUnique({
+        where: { id: parseInt(application.event.id) },
+        select: { version: true },
+      });
+
       if (!application) {
         throw new Error('La aplicación no existe.');
       }
+
+      if (!event) {
+        throw new Error('El evento no existe.');
+      }
+      
       // Verificar si el usuario es el organizador del evento
       if (application.event.organizerId !== user.userId) throw new Error('Not authorized');
+
       // Verificar que la versión del cliente coincida con la versión de la base de datos
       if (application.version !== version) {
         throw new Error('La aplicación ha sido modificada por otro usuario. Actualiza la página e inténtalo de nuevo.');
       }
-      
-      //si la aplicación ya fue gestionada
+
+      if (event.version !== eventVersion) {
+        throw new Error('El evento ha sido modificada por otro usuario. Actualiza la página e inténtalo de nuevo.');
+      }
+
+      // Si la aplicación ya fue gestionada
       if(application.status !== 'PENDING') throw new Error('Application already resolved.',{
         invalidArgs: { applicationId },
       });
+
+      // Comprobar la capacidad máxima del evento antes de aceptar la aplicación
+      if (status === 'ACCEPTED') {
+        const acceptedCount = await prisma.application.count({
+          where: {
+            eventId:  parseInt(application.event.id),
+            status: 'ACCEPTED',
+          },
+        });
+
+        if (acceptedCount >= application.event.maxCapacity ) {
+          throw new Error('No hay suficiente capacidad para aceptar esta aplicación.');
+        }
+      }
+
+      //Actualizar la version del evento
+      const eventUpdated = await prisma.event.update({
+        where: { id: parseInt(application.event.id) },
+        data: { version: eventVersion + 1}, // Incrementar la versión para el OCC
+      });
+
+      if(!eventUpdated){
+        throw new Error("No se pudo actualizar la versión.")
+      };
 
       return await prisma.application.update({
         where: { id: parseInt(applicationId) },
