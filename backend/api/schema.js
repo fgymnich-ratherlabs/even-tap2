@@ -20,6 +20,7 @@ const schema = buildSchema(`
       organizer: User!
       applications: [Application]
       organizerId: Int!
+      version: Int
     }
   
     type Application {
@@ -41,7 +42,7 @@ const schema = buildSchema(`
       signin(email: String!, password: String!): String
       createEvent(name: String!, description: String!, location: String!, date: String!, maxCapacity: Int!): Event
       applyToEvent(eventId: ID!): Application
-      manageApplication(applicationId: ID!, status: String!, version: Int!): Application!
+      manageApplication(applicationId: ID!, status: String!, version: Int!, eventVersion: Int!): Application!
     }
   `);
 

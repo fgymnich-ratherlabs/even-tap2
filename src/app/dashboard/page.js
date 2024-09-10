@@ -43,7 +43,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-extrabold text-gray-900">Dashboard</h1>
+          <h1 className="text-2xl font-extrabold text-gray-900">Inicio</h1>
           <Link href="/create-event">
             <span className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
               Crear Evento
@@ -61,7 +61,6 @@ export default function Dashboard() {
                   <div className="flex items-center">
                     <div className="ml-3">
                       <p className="text-gray-900 font-medium">{event.name}</p>
-                      <p className="text-gray-500">{event.description}</p>
                       <p className="text-gray-500">{event.location}</p>
                       <p className="text-gray-500">{new Date(parseInt(event.date)).toLocaleDateString()}
                       </p>
