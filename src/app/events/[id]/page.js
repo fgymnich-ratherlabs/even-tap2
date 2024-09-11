@@ -1,8 +1,7 @@
 "use client"
 
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useQuery, useMutation, ApolloError} from '@apollo/client';
 import Link from 'next/link';
-//import { format } from 'date-fns';
 
 const GET_EVENT_QUERY = gql`
   query GetEvent($id: ID!) {
@@ -52,7 +51,15 @@ export default function EventPage({params}) {
 
   const handleApply = async (e) => {
     e.preventDefault();
-    applyToEvent({ variables: { eventId: params.id, } });
+    try {
+      await applyToEvent({ variables: { eventId: params.id, } });
+    } catch (error) {
+      if (error instanceof ApolloError) {
+        console.error('Error al aplicar al evento:', error.message);
+      } else {
+        console.error('Error inesperado:', error);
+      }
+    }
   };
 
   const event = data?.event;

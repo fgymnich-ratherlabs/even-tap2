@@ -1,5 +1,5 @@
 "use client"
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useQuery, useMutation, ApolloError } from '@apollo/client';
 import React, {useState} from 'react';
 
 // Definir la consulta para obtener las aplicaciones de un evento específico
@@ -82,7 +82,11 @@ export default function EventApplications({ params }) {
         setTimeout(() => setSuccessMessage(''), 3000);
 
       }catch(error){
-        console.error('Error updating application status:', error);
+        if (error instanceof ApolloError) {
+          console.error('Error al gestionar la aplicación al evento:', error.message);
+        } else {
+          console.error('Error inesperado:', error);
+        }
       }; 
       
     };
