@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const { ApolloError, UserInputError } = require('apollo-server-express'); 
+const { ApolloError, UserInputError, AuthenticationError } = require('apollo-server-express'); 
 const {SignupSchema, SigninSchema, CreateEventSchema} = require('./../schema-validations/validations');
 
 const authenticate = async (context) => {
@@ -135,7 +135,7 @@ const root = {
 
     } catch (error) {
       console.error('Error en el inicio de sesión:', error);
-      throw new ApolloError('No se pudo iniciar sesión.', 'SIGNIN_ERROR');
+      throw new ApolloError('Usuario o Contraseña incorrectos.', 'SIGNIN_ERROR');
     }
   },
 
@@ -223,8 +223,13 @@ const root = {
       return application;
 
     } catch (error) {
+      if (error instanceof ApolloError){
+        throw error;
+      }
+      else {
       console.error('Error al aplicar al evento:', error);
       throw new ApolloError('No se pudo aplicar al evento.', 'APPLICATION_ERROR');
+      }
     }
   },
 
@@ -302,6 +307,9 @@ const root = {
       });
 
     } catch (error) {
+      if (error instanceof ApolloError){
+        throw error;
+      }
       console.error('Error al gestionar la aplicación:', error);
       throw new ApolloError('No se pudo gestionar la aplicación.', 'APPLICATION_MANAGEMENT_ERROR', {
         internalData: error.message
