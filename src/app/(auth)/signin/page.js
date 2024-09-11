@@ -19,23 +19,24 @@ export default function SigninForm() {
   const [signin, { data, loading, error }] = useMutation(SIGNIN_MUTATION);
   const router = useRouter();
 
-  const handleSignin = async (values,{setSubmitting}) => {
-    const { email , password } = values;
+  const handleSignin = async (values, { setSubmitting, setFieldError }) => {
+    const { email, password } = values;
     try {
       const response = await signin({ variables: { email, password } });
-      if(response?.data?.signin){ 
+      
+      if (response?.data?.signin) { 
         // Almacenar el token que devuelve signin en localStorage o cookies
-        //localStorage.setItem('authToken', response.data.signin);
         Cookies.set('authToken', response.data.signin, { expires: 1, secure: true, sameSite: 'Strict' });
         router.push('/dashboard'); // Redirigir al dashboard u otra página tras iniciar sesión
         router.refresh();
-      }else{
-        window.alert("Usuario o Clave incorrectas.");
+      } else {
+        setFieldError('password', 'Usuario o Contraseña incorrectas');
       }
-    } catch(error) {
-      throw new Error('Error during sign in:', error);
+    } catch (err) {
+      // Manejar errores de autenticación
+      setFieldError('password', 'Usuario o Contraseña incorrectas');
     } finally {
-      setSubmitting(false); // Indicar que el envío ha terminado
+      setSubmitting(false);
     }
   };
 
@@ -104,7 +105,6 @@ export default function SigninForm() {
                   {isSubmitting || loading ? 'Cargando...' : 'Iniciar Sesión'}
                 </button>
               </div>
-              {error && <p className="mt-2 text-red-500">{error.message}</p>}
             </Form>
           )}
         </Formik>
