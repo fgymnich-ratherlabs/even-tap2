@@ -1,90 +1,42 @@
-//esto es un borrador para tratar de implementar validaciones de entrada
-const Joi = require('joi');
+const Yup = require('yup');
 
-export const eventValidationSchema = Joi.object({
-    id: Joi.string().min(1).max(6).required()
+const SignupSchema = Yup.object().shape({
+    name: Yup.string()
+        .min(3, 'El nombre debe tener al menos 3 caracteres')
+        .max(50, 'El nombre no puede tener más de 50 caracteres')
+        .required('El nombre es obligatorio'),
+    email: Yup.string()
+        .email('Debe ser un correo electrónico válido')
+        .required('El correo electrónico es obligatorio'),
+    password: Yup.string()
+        .min(8, 'La contraseña debe tener al menos 8 caracteres')
+        .required('La contraseña es obligatoria'),
 });
 
-const eventValidation = async (parent, args, context, info) => {
-    const { error } = eventValidationSchema.validate(args);
-    if (error) {
-        throw new Error(error.details[0].message);
-    }
-
-    // Procesar...
-};
-
-export const signupValidationSchema = Joi.object({
-    name: Joi.string().min(3).max(30).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).max(30).required()
+const SigninSchema = Yup.object({
+    email: Yup.string()
+        .required('Mail requerido'),
+    password: Yup.string()
+        .required('Constraseña requerida'),
 });
 
-const signupValidation = async (parent, args, context, info) => {
-    const { error } = signupValidationSchema.validate(args);
-    if (error) {
-        throw new Error(error.details[0].message);
-    }
-
-    // Procesar el registro del usuario...
-};
-
-export const signinValidationSchema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).max(30).required()
+const CreateEventSchema = Yup.object({
+    name: Yup.string()
+      .required('El nombre es requerido')
+      .max(50, 'El nombre debe tener 50 caracteres o menos'),
+    description: Yup.string()
+      .required('La descripción es requerida')
+      .max(500, 'La descripción debe tener 500 caracteres o menos'),
+    location: Yup.string()
+      .required('El lugar es requerido')
+      .max(50, 'El lugar debe tener 50 caracteres o menos'),
+    date: Yup.date()
+      .required('La fecha es requerida')
+      .min(new Date(), 'La fecha debe ser futura'),
+    maxCapacity: Yup.number()
+      .required('La capacidad máxima es requerida')
+      .min(1, 'La capacidad mínima es 1')
+      .max(100000, 'La capacidad máxima es 10,000'),
 });
 
-const loginValidation = async (parent, args, context, info) => {
-    const { error } = signinValidationSchema.validate(args);
-    if (error) {
-        throw new Error(error.details[0].message);
-    }
-
-    // Procesar el inicio de sesión del usuario...
-};
-
-export const createEventValidationSchema = Joi.object({
-    name: Joi.string().min(3).max(50).required(),
-    description: Joi.string().min(10).max(500).required(),
-    location: Joi.string().min(3).max(100).required(),
-    date: Joi.date().iso().required(),
-    maxCapacity: Joi.number().integer().min(1).required()
-});
-
-const createEventValidation = async (parent, args, context, info) => {
-    const { error } = createEventValidationSchema.validate(args);
-    if (error) {
-        throw new Error(error.details[0].message);
-    }
-
-    // Procesar la creación del evento...
-};
-
-export const applyToEventValidationSchema = Joi.object({
-    eventId: Joi.string().uuid().required()
-});
-
-const applyToEventValidation = async (parent, args, context, info) => {
-    const { error } = applyToEventValidationSchema.validate(args);
-    if (error) {
-        throw new Error(error.details[0].message);
-    }
-
-    // Procesar la aplicación al evento...
-};
-
-export const manageApplicationValidationSchema = Joi.object({
-    applicationId: Joi.string().uuid().required(),
-    status: Joi.string().valid('PENDING', 'ACCEPTED', 'REJECTED').required()
-});
-
-const manageApplicationValidation = async (parent, args, context, info) => {
-    const { error } = manageApplicationValidationSchema.validate(args);
-    if (error) {
-        throw new Error(error.details[0].message);
-    }
-
-    // Procesar la gestión de la aplicación...
-};
-
-module.exports = {signupValidationSchema, signinValidationSchema, createEventValidationSchema, applyToEventValidationSchema, manageApplicationValidationSchema }
+module.exports = {SignupSchema, SigninSchema, CreateEventSchema};
