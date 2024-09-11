@@ -1,6 +1,7 @@
 "use client"
 
 import React from 'react';
+import Image from 'next/image'
 import { useMutation, gql } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -39,17 +40,22 @@ export default function SigninForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h1 className="text-center text-3xl font-extrabold text-gray-900">Even Tap</h1>
-          <p className="mt-2 text-center text-2xl font-bold text-gray-700">
-            El lugar donde confluyen tus eventos
+          <p className="mb-2 text-center text-xl font-bold text-gray-700">
+              El lugar donde confluyen tus eventos
           </p>
+          <Image
+            src="/logo.png"
+            width={1792}
+            height={720}
+            alt="logo"
+          />
         </div>
         <div>
-          <h2 className="mt-6 text-center text-xl font-extrabold text-gray-800">Iniciar Sesión</h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-800">Iniciar Sesión</h2>
+          <p className="mt-2 text-center text-xl text-gray-600">
             Ingresa con tu correo y contraseña para continuar.
           </p>
         </div>
