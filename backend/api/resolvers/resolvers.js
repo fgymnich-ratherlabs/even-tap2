@@ -53,9 +53,21 @@ const root = {
     }
   },
 
-  events: async () => {
+  events: async ( { skip=0 , take=10   }) => {
     try {
-      return await prisma.event.findMany({ include: { organizer: true } });
+      const events = await prisma.event.findMany({ 
+        include: { organizer: true },
+        skip: parseInt(skip,10),
+        take: parseInt(take,10),
+        orderBy: {
+          name: 'asc'
+        },
+      });
+
+      const totalEvents = await prisma.event.count(); // Contar todos los eventos
+
+      return { events, totalEvents};
+
     } catch (error) {
       console.error('Error fetching events:', error);
       throw new ApolloError('No se pudieron obtener los eventos.', 'EVENTS_FETCH_ERROR');
