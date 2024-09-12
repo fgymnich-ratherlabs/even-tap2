@@ -30,10 +30,15 @@ const schema = buildSchema(`
       event: Event!
       version: Int!
     }
+    
+    type PaginatedEvents {
+      events: [Event]
+      totalEvents: Int!
+    }
   
     type Query {
       user: User
-      events: [Event!]!
+      events(skip: Int, take: Int): PaginatedEvents!
       event(id: ID!): Event
     }
   
