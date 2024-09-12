@@ -42,8 +42,6 @@ export default function ProfilePage() {
 
   const {user} = data;
 
-  console.log(user);
-
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -65,10 +63,14 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <div className="ml-4 flex-shrink-0">
-                    <a href={`/events/${event.id}`} className="text-indigo-600 hover:text-indigo-500">Ver detalles</a>
+                    <a href={`/events/${event.id}`} className="text-indigo-600 hover:text-indigo-500">
+                      Ver detalles
+                    </a>
                   </div>
                   <div>
-                    <a href={`/profile/manage/${event.id}`} className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Gestionar aplicaciones</a>
+                    <a href={`/profile/manage/${event.id}`} className="text-center ml-2 inline-flex  px-2 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                      Gestionar aplicaciones
+                    </a>
                   </div>
                 </li>
               ))}
