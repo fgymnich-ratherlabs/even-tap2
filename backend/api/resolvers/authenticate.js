@@ -10,6 +10,7 @@ async function authenticate (context) {
       const decripted = jwt.verify(token, process.env.SECRET_KEY);
       return decripted; //devuelve el token desencriptado
     } catch (e) {
+      console.log('Authenticate error: ', e );
       throw new Error('Invalid token');
     }
 }
