@@ -5,18 +5,7 @@ require('dotenv').config();
 const { ApolloError, UserInputError, AuthenticationError } = require('apollo-server-express'); 
 const {SignupSchema, SigninSchema, CreateEventSchema} = require('./../schema-validations/validations');
 
-const authenticate = async (context) => {
-    const authHeader = context.headers.authorization;
-    if (!authHeader) throw new Error('Not authenticated');
-    const token = authHeader.replace('Bearer ', '');
-    try {
-      decripted = jwt.verify(token, process.env.SECRET_KEY);
-      //agregar expiry
-      return decripted; //devuelve el token desencriptado
-    } catch (e) {
-      throw new Error('Invalid token');
-    }
-};
+const {authenticate} = require('./../resolvers/authenticate');
 
 const prisma = new PrismaClient();
 
@@ -46,6 +35,9 @@ const root = {
       return user;
 
     } catch (error) {
+      if (error instanceof ApolloError){
+        throw error;
+      }
       console.error("Error fetching user:", error);
       throw new ApolloError('No se pudo obtener la información del usuario.', 'USER_FETCH_ERROR', {
         internalData: error.message
@@ -100,6 +92,9 @@ const root = {
       return event;
 
     } catch (error) {
+      if (error instanceof ApolloError){
+        throw error
+      }
       console.error('Error al obtener el evento:', error);
       throw new ApolloError('No se pudo obtener el evento', 'EVENT_FETCH_ERROR', {
         internalData: error.message
@@ -128,6 +123,9 @@ const root = {
       return user.name;
 
     } catch (error) {
+      if ( error instanceof ApolloError ){
+        throw error;
+      }
       console.error('Error al crear el usuario:', error);
       throw new ApolloError('No se pudo crear el usuario.', 'USER_CREATION_ERROR');
     }
@@ -138,16 +136,19 @@ const root = {
       await SigninSchema.validate({ email, password },{ abortEarly:false });//validar datos entrada
       
       const user = await prisma.user.findUnique({ where: { email } });
-      if (!user) throw new AuthenticationError('Usuario no encontrado.');
+      if (!user) throw new AuthenticationError('Usuario o Contraseña incorrectos.');
 
       const valid = await bcrypt.compare(password, user.password);
-      if (!valid) throw new AuthenticationError('Clave incorrecta.');
+      if (!valid) throw new AuthenticationError('Usuario o Contraseña incorrectos.');
 
       return jwt.sign({ userId: user.id, role: user.role }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
     } catch (error) {
+      if (error instanceof ApolloError) {
+        throw error
+      }
       console.error('Error en el inicio de sesión:', error);
-      throw new ApolloError('Usuario o Contraseña incorrectos.', 'SIGNIN_ERROR');
+      throw new ApolloError('No se pudo iniciar sesión.', 'SIGNIN_ERROR');
     }
   },
 
