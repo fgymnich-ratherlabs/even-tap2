@@ -12,7 +12,6 @@ const root = require('./resolvers/resolvers');
 
 const authenticateMiddleware = require('./middleware/authenticate');
 
-
 if (cluster.isMaster) {
   console.log(`Master process ID: ${process.pid}`);
   console.log(`cpus number: ${numCPUs}`);
@@ -36,29 +35,6 @@ if (cluster.isMaster) {
   });
 }else {
   // Los procesos workers entrarán en este bloque
-  async function main() {
-    try{
-
-      const app = await setupServer({
-        schema,                 // Inject graphQL schema
-        authenticateMiddleware, // Inject authentication middleware
-        root      // Inject prisma client and resolvers
-      });
-
-      const port = 10000;
-      const server = app.listen(port, () => {
-        console.log(`Worker process ID ${process.pid} is running, listening on port ${port}`);
-      });
-
-      process.on('SIGTERM', () => shutdown({ server, signal: 'SIGTERM' }));
-      process.on('SIGINT', () => shutdown({ server, signal: 'SIGINT' }));
-
-    }catch(error){
-      console.error(`Worker process ID ${process.pid} initialization error:`, error);
-      process.exit(1);
-    }
-  }
-
   main()
     .then(() => {
       console.log(`Worker process ID ${process.pid} initialized successfully`);
@@ -69,6 +45,28 @@ if (cluster.isMaster) {
 
 }
 
+async function main() {
+  try{
+
+    const app = await setupServer({
+      schema,                 // Inject graphQL schema
+      authenticateMiddleware, // Inject authentication middleware
+      root      // Inject prisma client and resolvers
+    });
+
+    const port = 10000;
+    const server = app.listen(port, () => {
+      console.log(`Worker process ID ${process.pid} is running, listening on port ${port}`);
+    });
+
+    process.on('SIGTERM', () => shutdown({ server, signal: 'SIGTERM' }));
+    process.on('SIGINT', () => shutdown({ server, signal: 'SIGINT' }));
+
+  }catch(error){
+    console.error(`Worker process ID ${process.pid} initialization error:`, error);
+    process.exit(1);
+  }
+}
 
 
 

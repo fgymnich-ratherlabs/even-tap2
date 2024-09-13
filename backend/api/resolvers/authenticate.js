@@ -7,11 +7,11 @@ async function authenticate (context) {
     if (!authHeader) throw new Error('Not authenticated');
     const token = authHeader.replace('Bearer ', '');
     try {
-      decripted = jwt.verify(token, process.env.SECRET_KEY);
+      const decripted = jwt.verify(token, process.env.SECRET_KEY);
       return decripted; //devuelve el token desencriptado
     } catch (e) {
       throw new Error('Invalid token');
     }
-};
+}
 
 module.exports = {authenticate};

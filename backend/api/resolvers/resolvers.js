@@ -94,7 +94,7 @@ const root = {
     } catch (error) {
       if (error instanceof ApolloError){
         throw error
-      };
+      }
       console.error('Error al obtener el evento:', error);
       throw new ApolloError('No se pudo obtener el evento', 'EVENT_FETCH_ERROR', {
         internalData: error.message
