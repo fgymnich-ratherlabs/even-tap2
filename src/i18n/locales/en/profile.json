@@ -1,0 +1,11 @@
+{
+    "profile_title": "Profile of {{name}}",
+    "created_events": "Created Events",
+    "applied_events": "Applied Events",
+    "view_details": "View Details",
+    "manage_applications": "Manage Applications",
+    "status": "Status",
+    "loading": "Loading...",
+    "error_loading": "Error loading user data"
+}
+  

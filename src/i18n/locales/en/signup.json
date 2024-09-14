@@ -1,0 +1,13 @@
+{
+    "title": "Sign up for Even Tap",
+    "subtitle": "Where your events come together",
+    "signup_prompt": "Welcome! Sign up to access the platform:",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "loading": "Loading...",
+    "submit_button": "Sign Up",
+    "signin_prompt": "Already have an account?",
+    "signin_link": "Sign In"
+  }
+  

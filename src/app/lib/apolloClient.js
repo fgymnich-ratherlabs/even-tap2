@@ -30,7 +30,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         if (extensions && extensions.code === 'FORBIDDEN') {
           // Si el código de error es 403, redirige al usuario al signin
           Cookies.remove('authToken'); // Eliminar el token de las cookies
-          window.location.href = '/signin';
+          window.location.href = '/';
         }
       });
     }
@@ -38,13 +38,13 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (networkError && networkError.statusCode === 403) {
       // Manejar errores de red 403
       Cookies.remove('authToken'); // Eliminar el token de las cookies
-      window.location.href = '/signin';
+      window.location.href = '/';
     }
 
     if (networkError && networkError.statusCode === 401) {
       // Manejar errores de red 403
       Cookies.remove('authToken'); // Eliminar el token de las cookies
-      window.location.href = '/signin';
+      window.location.href = '/';
     }
   }
 });

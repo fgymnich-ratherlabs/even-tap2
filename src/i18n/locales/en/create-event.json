@@ -1,0 +1,13 @@
+{
+    "title": "Create Event",
+    "name": "Event Name",
+    "description": "Description",
+    "location": "Location",
+    "date": "Date",
+    "maxCapacity": "Maximum Capacity",
+    "loading": "Creating...",
+    "submit": "Create Event",
+    "error": "Error",
+    "success": "Event successfully created"
+  }
+  
