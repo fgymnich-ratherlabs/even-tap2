@@ -1,0 +1,14 @@
+{
+    "welcome": "El lugar donde confluyen tus eventos",
+    "signin": "Iniciar Sesión",
+    "signin_prompt": "Ingresa con tu correo y contraseña para continuar.",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit_button": "Iniciar Sesión",
+    "loading": "Cargando...",
+    "incorrect_credentials": "Usuario o Contraseña incorrectas",
+    "error_credentials": "Hubo un error al inciar sesión.",
+    "register_prompt": "¿No tienes una cuenta?",
+    "register_link": "Registarse"
+  }
+  

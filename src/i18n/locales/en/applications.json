@@ -1,0 +1,12 @@
+{
+    "loading": "Loading...",
+    "error_loading": "Error: {{message}}",
+    "event_applications": "Applications for Event {{eventName}}",
+    "accept": "Accept",
+    "reject": "Reject",
+    "no_pending_applications": "No pending applications for this event.",
+    "status": "Status",
+    "success_acceptance": "The user's application has been accepted.",
+    "success_rejection": "The user's application has been rejected."
+  }
+  

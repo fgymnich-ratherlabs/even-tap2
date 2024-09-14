@@ -1,0 +1,13 @@
+{
+    "title": "Crear Evento",
+    "name": "Nombre del Evento",
+    "description": "Descripción",
+    "location": "Lugar",
+    "date": "Fecha",
+    "maxCapacity": "Capacidad Máxima",
+    "loading": "Creando...",
+    "submit": "Crear Evento",
+    "error": "Error",
+    "success": "Evento creado exitosamente"
+  }
+  

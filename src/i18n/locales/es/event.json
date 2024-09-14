@@ -1,0 +1,16 @@
+{
+    "event_details": "Detalles del Evento",
+    "description": "Descripción",
+    "location": "Ubicación",
+    "date": "Fecha",
+    "max_capacity": "Capacidad Máxima",
+    "organizer": "Organizador",
+    "apply": "Aplicar al Evento",
+    "applying": "Aplicando...",
+    "application_success": "¡Solicitud de Aplicación Exitosa! A la brevedad se tendrá la confirmación de aceptación. Puede volver a Inicio.",
+    "application_error": "Error: ",
+    "back_to_dashboard": "Volver a Inicio",
+    "loading": "Cargando...",
+    "error_loading": "Error al cargar evento"
+  }
+  

@@ -1,0 +1,14 @@
+{
+    "title": "Dashboard",
+    "create_event": "Create Event",
+    "upcoming_events": "Upcoming Events",
+    "event_location": "Location",
+    "event_date": "Date",
+    "view_details": "View details or Apply",
+    "prev_button": "Previous",
+    "next_button": "Next",
+    "loading_events": "Loading events...",
+    "error_loading": "Error loading events",
+    "no_events": "No events available"
+}
+  
