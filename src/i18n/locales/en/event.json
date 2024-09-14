@@ -1,0 +1,16 @@
+{
+    "event_details": "Event Details",
+    "description": "Description",
+    "location": "Location",
+    "date": "Date",
+    "max_capacity": "Maximum Capacity",
+    "organizer": "Organizer",
+    "apply": "Apply to Event",
+    "applying": "Applying...",
+    "application_success": "Application Successful! Confirmation will follow soon. You can return to the dashboard.",
+    "application_error": "Error: ",
+    "back_to_dashboard": "Back to Dashboard",
+    "loading": "Loading...",
+    "error_loading": "Error loading event"
+  }
+  

@@ -1,0 +1,14 @@
+{
+    "title": "Inicio",
+    "create_event": "Crear Evento",
+    "upcoming_events": "Eventos Próximos",
+    "event_location": "Lugar",
+    "event_date": "Fecha",
+    "view_details": "Ver detalles o Aplicar",
+    "prev_button": "Anterior",
+    "next_button": "Siguiente",
+    "loading_events": "Cargando eventos...",
+    "error_loading": "Error al cargar eventos",
+    "no_events": "No hay eventos disponibles"
+}
+  

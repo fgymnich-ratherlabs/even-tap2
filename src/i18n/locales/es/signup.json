@@ -1,0 +1,13 @@
+{
+    "title": "Regístrate en Even Tap",
+    "subtitle": "El lugar donde confluyen tus eventos",
+    "signup_prompt": "¡Bienvenido! Regístrate para acceder a la plataforma:",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "loading": "Cargando...",
+    "submit_button": "Registrarse",
+    "signin_prompt": "¿Ya tienes una cuenta?",
+    "signin_link": "Inicia sesión"
+  }
+  
