@@ -55,6 +55,6 @@ export const config = {
     '/profile',   
     '/signin',
     '/signup',
-    '/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|site.webmanifest).*)' //matcher /lang
+    '/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|logo.png|site.webmanifest).*)' //matcher /lang
   ],
 };
