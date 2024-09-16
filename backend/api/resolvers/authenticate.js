@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-
 async function authenticate (context) {
-    const authHeader = context.headers.authorization;
+    const authHeader = context.req.headers.authorization;
     if (!authHeader) throw new Error('Not authenticated');
     const token = authHeader.replace('Bearer ', '');
     try {

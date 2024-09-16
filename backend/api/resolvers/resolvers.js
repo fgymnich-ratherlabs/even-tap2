@@ -12,6 +12,8 @@ const prisma = new PrismaClient();
 const root = {
   //get current user
   user: async (args, context) => {
+    const { rollbar } = context;
+
     try {
       const Id = await authenticate(context);
       const userId = parseInt(Id.userId);
@@ -38,14 +40,15 @@ const root = {
       if (error instanceof ApolloError){
         throw error;
       }
-      console.error("Error fetching user:", error);
+      rollbar.error("Error fetching user:", error);
       throw new ApolloError('No se pudo obtener la información del usuario.', 'USER_FETCH_ERROR', {
         internalData: error.message
       });
     }
   },
 
-  events: async ( { skip=0 , take=10   }) => {
+  events: async ( { skip=0 , take=10   }, context) => {
+    const { rollbar } = context;
     try {
       const events = await prisma.event.findMany({ 
         include: { organizer: true },
@@ -61,12 +64,14 @@ const root = {
       return { events, totalEvents};
 
     } catch (error) {
-      console.error('Error fetching events:', error);
+      rollbar.error('Error fetching events:', error);
       throw new ApolloError('No se pudieron obtener los eventos.', 'EVENTS_FETCH_ERROR');
     }
   },
 
-  event: async ({ id }) => {
+  event: async ({ id }, context) => {
+    const { rollbar } = context;
+
     if (!id){
       throw new UserInputError('Id necesario.', { invalidArgs: ['id'] });
     }
@@ -95,14 +100,16 @@ const root = {
       if (error instanceof ApolloError){
         throw error
       }
-      console.error('Error al obtener el evento:', error);
+      rollbar.error('Error al obtener el evento:', error);
       throw new ApolloError('No se pudo obtener el evento', 'EVENT_FETCH_ERROR', {
         internalData: error.message
       });
     }
   },
 
-  signup: async ({ name, email, password }) => {
+  signup: async ({ name, email, password }, context) => {
+    const { rollbar } = context;
+
     try {
       await SignupSchema.validate({ name, email, password },{ abortEarly:false });//validar datos entrada
 
@@ -126,12 +133,14 @@ const root = {
       if ( error instanceof ApolloError ){
         throw error;
       }
-      console.error('Error al crear el usuario:', error);
+      rollbar.error('Error al crear el usuario:', error);
       throw new ApolloError('No se pudo crear el usuario.', 'USER_CREATION_ERROR');
     }
   },
 
-  signin: async ({ email, password }) => {
+  signin: async ({ email, password }, context) => {
+    const { rollbar } = context;
+
     try {
       await SigninSchema.validate({ email, password },{ abortEarly:false });//validar datos entrada
       
@@ -147,12 +156,14 @@ const root = {
       if (error instanceof ApolloError) {
         throw error
       }
-      console.error('Error en el inicio de sesión:', error);
+      rollbar.error('Error en el inicio de sesión:', error);
       throw new ApolloError('No se pudo iniciar sesión.', 'SIGNIN_ERROR');
     }
   },
 
   createEvent: async ({ name, description, location, date, maxCapacity }, context) => {
+    const { rollbar } = context;
+
     const user = await authenticate(context);
 
     try { 
@@ -175,12 +186,14 @@ const root = {
       return event;
 
     } catch (error) {
-      console.error('Error al crear el evento:', error);
+      rollbar.error('Error al crear el evento:', error);
       throw new ApolloError('No se pudo crear el evento.', 'EVENT_CREATION_ERROR');
     }
   },
 
   applyToEvent: async ({ eventId }, context) => {
+    const { rollbar } = context;
+
     const user = await authenticate(context);
     const userId = parseInt(user.userId);
     const parsedEventId = parseInt(eventId);
@@ -240,13 +253,15 @@ const root = {
         throw error;
       }
       else {
-      console.error('Error al aplicar al evento:', error);
+      rollbar.error('Error al aplicar al evento:', error);
       throw new ApolloError('No se pudo aplicar al evento.', 'APPLICATION_ERROR');
       }
     }
   },
 
   manageApplication: async ({ applicationId, status, version, eventVersion }, context) => {
+    const { rollbar } = context;
+
     const user = await authenticate(context);
 
     try {
@@ -323,7 +338,7 @@ const root = {
       if (error instanceof ApolloError){
         throw error;
       }
-      console.error('Error al gestionar la aplicación:', error);
+      rollbar.error('Error al gestionar la aplicación:', error);
       throw new ApolloError('No se pudo gestionar la aplicación.', 'APPLICATION_MANAGEMENT_ERROR', {
         internalData: error.message
       });
