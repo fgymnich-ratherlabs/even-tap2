@@ -51,6 +51,7 @@ export default function SigninForm({params}) {
             width={1792}
             height={720}
             alt="logo"
+            priority={true}
           />
         </div>
         <div>
