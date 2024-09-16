@@ -12,6 +12,8 @@ const root = require('./resolvers/resolvers');
 
 const authenticateMiddleware = require('./middleware/authenticate');
 
+const rollbar = require('./rollbar');
+
 if (cluster.isMaster) {
   console.log(`Master process ID: ${process.pid}`);
   console.log(`cpus number: ${numCPUs}`);
@@ -51,7 +53,8 @@ async function main() {
     const app = await setupServer({
       schema,                 // Inject graphQL schema
       authenticateMiddleware, // Inject authentication middleware
-      root      // Inject prisma client and resolvers
+      root,      // Inject prisma client and resolvers
+      rollbar
     });
 
     const port = 10000;

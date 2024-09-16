@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { graphqlHTTP } = require('express-graphql');
 
-async function setupServer({ schema, authenticateMiddleware, root }) {
+async function setupServer({ schema, authenticateMiddleware, root, rollbar }) {
     const app = express();
 
     app.use(express.json());
@@ -20,9 +20,12 @@ async function setupServer({ schema, authenticateMiddleware, root }) {
     app.use('/graphql', authenticateMiddleware, graphqlHTTP((req) => ({
       schema,
       rootValue: root,
-      context: req,
-      graphiql: true,
+      context: { req , rollbar },
+      graphiql: false,
     })));
+
+    //Rollbar error handler
+    app.use(rollbar.errorHandler());
 
     return app;
 }
