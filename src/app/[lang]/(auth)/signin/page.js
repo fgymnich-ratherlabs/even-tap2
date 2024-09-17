@@ -3,8 +3,6 @@
 import {React, useContext} from 'react';
 import Image from 'next/image';
 import { useMutation, gql } from '@apollo/client';
-import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 import { useTranslation } from './../../../../i18n/client';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -16,28 +14,11 @@ const SIGNIN_MUTATION = gql`
   }
 `;
 
+import { handleSignin } from './../../../lib/handleSignin'
+
 export default function SigninForm({params}) {
   const { t } = useTranslation(params.lang, 'signin'); // Hook para traducción
-  const [signin, { loading }] = useMutation(SIGNIN_MUTATION);
-  const router = useRouter();
-
-  const handleSignin = async (values, { setSubmitting, setFieldError }) => {
-    const { email, password } = values;
-    try {
-      const response = await signin({ variables: { email, password } });
-
-      if (response?.data?.signin) { 
-        Cookies.set('authToken', response.data.signin, { expires: 1, secure: true, sameSite: 'Strict' });
-        window.location.href ='/dashboard'; 
-      } else {
-        setFieldError('password', t('incorrect_credentials'));
-      }
-    } catch (err) {
-      setFieldError('password', t('error_credentials'));
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  const [signin, { loading, data, error }] = useMutation(SIGNIN_MUTATION);
 
   return (
     <div className="min-h-screen flex justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -65,7 +46,9 @@ export default function SigninForm({params}) {
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={SigninSchema}
-          onSubmit={handleSignin}
+          onSubmit={(values, { setSubmitting, setFieldError }) =>
+            handleSignin(values, { setSubmitting, setFieldError },signin, t) // Usar la función importada
+          }
         >
           {({ isSubmitting }) => (
             <Form className="mt-8 space-y-6">

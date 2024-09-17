@@ -22,7 +22,12 @@ describe('Resolvers - signin', () => {
     bcrypt.compare.mockResolvedValue(true);
     jwt.sign.mockReturnValue('fakeToken');
 
-    const result = await signin({ email: 'john@example.com', password: '123456' });
+    // Mockear rollbar
+    const rollbarMock = { error: jest.fn() };
+    // Crear un objeto context con rollbar
+    const context = { rollbar: rollbarMock };
+
+    const result = await signin({ email: 'john@example.com', password: '123456' }, context);
 
     expect(result).toBe('fakeToken');
     expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: 'john@example.com' } });
@@ -32,15 +37,25 @@ describe('Resolvers - signin', () => {
   it('should throw an error if user is not found', async () => {
     prisma.user.findUnique.mockResolvedValue(null);
 
-    await expect(signin({ email: 'john@example.com', password: '123456' })).rejects.toThrow('Usuario o Contraseña incorrectos.');
+    // Mockear rollbar
+    const rollbarMock = { error: jest.fn() };
+    // Crear un objeto context con rollbar
+    const context = { rollbar: rollbarMock };
+
+    await expect(signin({ email: 'john@example.com', password: '123456' }, context)).rejects.toThrow('Usuario o Contraseña incorrectos.');
   });
 
   it('should throw an error if password is incorrect', async () => {
     const mockUser = { id: 1, email: 'john@example.com', password: 'hashedPassword' };
 
+    // Mockear rollbar
+    const rollbarMock = { error: jest.fn() };
+    // Crear un objeto context con rollbar
+    const context = { rollbar: rollbarMock };
+
     prisma.user.findUnique.mockResolvedValue(mockUser);
     bcrypt.compare.mockResolvedValue(false);
 
-    await expect(signin({ email: 'john@example.com', password: 'wrongpassword' })).rejects.toThrow('Usuario o Contraseña incorrectos.');
+    await expect(signin({ email: 'john@example.com', password: 'wrongpassword' }, context)).rejects.toThrow('Usuario o Contraseña incorrectos.');
   });
 });
