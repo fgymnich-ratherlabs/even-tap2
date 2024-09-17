@@ -9,7 +9,12 @@ describe('Resolvers - event', () => {
 
     prisma.event.findUnique.mockResolvedValue(mockEvent);
 
-    const result = await event({ id: 1 });
+    // Mockear rollbar
+    const rollbarMock = { error: jest.fn() };
+    // Crear un objeto context con rollbar
+    const context = { rollbar: rollbarMock };  
+
+    const result = await event({ id: 1 }, context);
 
     expect(result).toEqual(mockEvent);
     expect(prisma.event.findUnique).toHaveBeenCalledWith({
@@ -21,12 +26,22 @@ describe('Resolvers - event', () => {
   it('should throw an error if event is not found', async () => {
     prisma.event.findUnique.mockResolvedValue(null);
 
-    await expect(event({ id: 999 })).rejects.toThrow('Evento no encontrado');
+    // Mockear rollbar
+    const rollbarMock = { error: jest.fn() };
+    // Crear un objeto context con rollbar
+    const context = { rollbar: rollbarMock };
+
+    await expect(event({ id: 999 }, context)).rejects.toThrow('Evento no encontrado');
   });
 
   it('should throw an error if event fetching fails', async () => {
     prisma.event.findUnique.mockRejectedValue(new Error('DB error'));
 
-    await expect(event({ id: 1 })).rejects.toThrow('No se pudo obtener el evento');
+    // Mockear rollbar
+    const rollbarMock = { error: jest.fn() };
+    // Crear un objeto context con rollbar
+    const context = { rollbar: rollbarMock };
+
+    await expect(event({ id: 1 }, context)).rejects.toThrow('No se pudo obtener el evento');
   });
 });
