@@ -13,7 +13,12 @@ describe('Resolvers - events', () => {
     prisma.event.findMany.mockResolvedValue(mockEvents);
     prisma.event.count.mockResolvedValue(2);
 
-    const result = await events({ skip: 0, take: 10 });
+    // Mockear rollbar
+    const rollbarMock = { error: jest.fn() };
+    // Crear un objeto context con rollbar
+    const context = { rollbar: rollbarMock };
+
+    const result = await events({ skip: 0, take: 10 }, context);
 
     expect(result.events).toHaveLength(2);
     expect(result.totalEvents).toBe(2);
@@ -24,6 +29,11 @@ describe('Resolvers - events', () => {
   it('should throw an error if fetching events fails', async () => {
     prisma.event.findMany.mockRejectedValue(new Error('DB error'));
 
-    await expect(events({ skip: 0, take: 10 })).rejects.toThrow('No se pudieron obtener los eventos.');
+    // Mockear rollbar
+    const rollbarMock = { error: jest.fn() };
+    // Crear un objeto context con rollbar
+    const context = { rollbar: rollbarMock };
+
+    await expect(events({ skip: 0, take: 10 }, context)).rejects.toThrow('No se pudieron obtener los eventos.');
   });
 });
